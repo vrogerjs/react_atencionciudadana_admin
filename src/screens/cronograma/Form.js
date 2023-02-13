@@ -105,7 +105,7 @@ export const Form = () => {
   }, [width, height]);
 
   useEffect(() => {
-    dispatch({ type: 'title', title: 'Registro Discapacidad' });
+    dispatch({ type: 'title', title: 'Administración de Tickets para Atención al Ciudadano - GORE Áncash' });
     fetchData(state.page)
   }, [state.page, state.rowsPerPage]);
 

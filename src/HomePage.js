@@ -112,10 +112,22 @@ const HomePage = ({ logOut, match }) => {
   ]
 
   const drawer = (
-    <div>
-      <Toolbar />
+    <div className='bg-gore'>
+      <Toolbar>
+        <Box
+          component="img"
+          sx={{
+            width: 150,
+            marginBottom: 2,
+            // maxHeight: { xs: 233, md: 167 },
+            // maxWidth: { xs: 350, md: 250 },
+          }}
+          alt="Logo GORE Áncash."
+          src="https://web.regionancash.gob.pe/fs/images/logo2018.png"
+        />
+      </Toolbar>
       <Divider />
-      <List>
+      <List >
         {items.filter((e) => {
           return e.perms ? perms.includes(e.perms) : true;
         }).map((item, index0) => (

@@ -151,3 +151,32 @@ textarea {
 .select {
   white-space: unset !important;
 }
+
+.mt-1 {
+  margin-top: 1em !important;
+}
+
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiDrawer-paperAnchorDockedLeft.css-12i7wg6-MuiPaper-root-MuiDrawer-paper {
+  background-color: #0f62ac !important;
+  border: 8px solid #0f62ac !important;
+}
+
+ul.MuiList-root.MuiList-padding.css-h4y409-MuiList-root {
+  background-color: #fff !important;
+  color: #000;
+  border-radius: 4px;
+}
+
+header.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation4.MuiAppBar-root.MuiAppBar-colorPrimary.MuiAppBar-positionFixed.mui-fixed.css-zxtyt4-MuiPaper-root-MuiAppBar-root {
+  background-color: #0f62ac !important;
+  border: 2px solid #FFF !important;
+  text-align: center !important;
+}
+
+.bb-2 {
+  border: 2px solid #FFF !important;
+}
+
+.MuiTypography-noWrap {
+  white-space: unset !important;
+}

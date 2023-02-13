@@ -127,7 +127,7 @@ const List = () => {
   }, [height, width]);
 
   useEffect(() => {
-    dispatch({ type: 'title', title: 'Registro Discapacidad' });
+    dispatch({ type: 'title', title: 'Administración de Tickets para Atención al Ciudadano - GORE Áncash' });
     fetchData(state.page)
   }, [state.page, state.rowsPerPage]);
 
@@ -162,7 +162,7 @@ const List = () => {
   }
   return (
     <>
-      <Toolbar className="Toolbar-table" direction="row" >
+      <Toolbar className="Toolbar-table mt-1" direction="row" >
         <Grid container spacing={2}>
           <Grid item xs={12} md={2}>
           </Grid>
