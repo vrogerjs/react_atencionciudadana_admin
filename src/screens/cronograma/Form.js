@@ -65,7 +65,7 @@ export const Form = () => {
   useEffect(() => {
     if (pid) {
       if (networkStatus.connected) {
-        http.get('http://localhost:8080/cronograma/' + pid).then((result) => {
+        http.get(process.env.REACT_APP_BASE_URL + '/cronograma/' + pid).then((result) => {
           result.dependencia = result.dependencia.id;
           var target = new Date("2023-08-02T" + result.horaini);
           result.horaini = target;
@@ -112,7 +112,7 @@ export const Form = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const resultD = await (http.get('http://localhost:8080/dependencia'));
+      const resultD = await (http.get(process.env.REACT_APP_BASE_URL +'/dependencia'));
       setDependencias(resultD);
     }
   };
@@ -135,12 +135,11 @@ export const Form = () => {
       var horaini = pad(horaini.getHours(), 2) + ":" + pad(horaini.getMinutes(), 2) + ":" + pad(horaini.getSeconds(), 2);
       var horafin = pad(horafin.getHours(), 2) + ":" + pad(horafin.getMinutes(), 2) + ":" + pad(horafin.getSeconds(), 2);
 
-      var o2 = { ...o, horaini: horaini, horafin: horafin, texto:days[o.dia] };
+      var o2 = { ...o, horaini: horaini, horafin: horafin, texto: days[o.dia] };
 
       if (networkStatus.connected) {
         o2.dependencia = { id: o.dependencia };
-        http.post('http://localhost:8080/cronograma', o2).then(async (result) => {
-          console.log(result);
+        http.post(process.env.REACT_APP_BASE_URL +'/cronograma', o2).then(async (result) => {
           if (!o2._id) {
             if (result.id) {
               // navigate('/dependencia/' + result.id + '/edit', { replace: true });
@@ -153,8 +152,6 @@ export const Form = () => {
           }
         });
       } else {
-        console.log("devulve", o2);
-
         if (!o2.id) {
           o2.tmpId = 1 * new Date();
           o2.id = -o2.tmpId;
@@ -197,7 +194,6 @@ export const Form = () => {
   function onChangeHoraini(v) {
     set(o => ({ ...o, horaini: v }), () => {
       o.horaini = v;
-      console.log(o)
     });
 
   }
@@ -205,7 +201,6 @@ export const Form = () => {
   function onChangeHorafin(v) {
     set(o => ({ ...o, horafin: v }), () => {
       o.horafin = v;
-      console.log(o)
     });
 
   }

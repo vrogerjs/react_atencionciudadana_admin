@@ -107,11 +107,11 @@ const List = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await http.get('http://localhost:8080/atencion/' + page + '/' + state.rowsPerPage + '?' + new URLSearchParams(o).toString() + '&activo=1');
+      const result = await http.get(process.env.REACT_APP_BASE_URL + '/atencion/' + page + '/' + state.rowsPerPage + '?' + new URLSearchParams(o).toString() + '&activo=1');
       data.size = result.size;
       data.data = data.data.concat(result.content);
 
-      const resultD = await (http.get('http://localhost:8080/dependencia'));
+      const resultD = await (http.get(process.env.REACT_APP_BASE_URL + '/dependencia'));
       setDependencias(resultD);
     }
     setResult(data);

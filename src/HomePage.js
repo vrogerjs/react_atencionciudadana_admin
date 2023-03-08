@@ -127,7 +127,7 @@ const HomePage = ({ logOut, match }) => {
         />
       </Toolbar>
       <Divider />
-      <List >
+      <List className='sidebar-gore'>
         {items.filter((e) => {
           return e.perms ? perms.includes(e.perms) : true;
         }).map((item, index0) => (

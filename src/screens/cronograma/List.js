@@ -102,7 +102,7 @@ const List = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await http.get('http://localhost:8080/cronograma/' + page + '/' + state.rowsPerPage);
+      const result = await http.get(process.env.REACT_APP_BASE_URL + '/cronograma/' + page + '/' + state.rowsPerPage);
       data.size = result.size;
       data.data = data.data.concat(result.content);
     }

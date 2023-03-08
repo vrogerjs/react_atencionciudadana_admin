@@ -55,9 +55,8 @@ export const Form = () => {
   useEffect(() => {
     if (pid) {
       if (networkStatus.connected) {
-        http.get('http://localhost:8080/dependencia/' + pid).then((result) => {
+        http.get(process.env.REACT_APP_BASE_URL + '/dependencia/' + pid).then((result) => {
           set(result);
-          console.log(result);
         });
       }
     } else {
@@ -105,7 +104,7 @@ export const Form = () => {
       var o2 = JSON.parse(JSON.stringify(o));
       if (networkStatus.connected) {
 
-        http.post('http://localhost:8080/dependencia', o2).then(async (result) => {
+        http.post(process.env.REACT_APP_BASE_URL + '/dependencia', o2).then(async (result) => {
           if (!o2._id) {
             if (result.id) {
               // navigate('/dependencia/' + result.id + '/edit', { replace: true });

@@ -9,11 +9,9 @@
 
 .MuiListItemIcon-root {
   min-width: 30px !important;
-
 }
 
 .MuiTableCell-head {
-
   padding: 5px;
 }
 
@@ -85,8 +83,7 @@ textarea {
 }
 
 .button-login {
-  background:
-    #b10000 -webkit-gradient(linear, left top, left bottom, from(rgba(245, 111, 111, 0.8)), to(rgba(255, 255, 255, 0)))
+  background: #b10000 -webkit-gradient(linear, left top, left bottom, from(rgba(245, 111, 111, 0.8)), to(rgba(255, 255, 255, 0)));
 }
 
 .MuiAccordionSummary-root {
@@ -156,7 +153,24 @@ textarea {
   margin-top: 1em !important;
 }
 
-.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiDrawer-paperAnchorDockedLeft.css-12i7wg6-MuiPaper-root-MuiDrawer-paper {
+.sidebar-gore {
+  background-color: #fff !important;
+  color: #000;
+  border-radius: 4px;
+}
+
+.MuiPaper-elevation0 {
+  background-color: #0f62ac !important;
+  border: 8px solid #0f62ac !important;
+}
+
+header.MuiPaper-elevation4 {
+  background-color: #0f62ac !important;
+  border: 2px solid #fff !important;
+  text-align: center !important;
+}
+
+/* .MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiDrawer-paperAnchorDockedLeft.css-12i7wg6-MuiPaper-root-MuiDrawer-paper {
   background-color: #0f62ac !important;
   border: 8px solid #0f62ac !important;
 }
@@ -171,10 +185,10 @@ header.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation4.MuiAppBar-root.MuiAp
   background-color: #0f62ac !important;
   border: 2px solid #FFF !important;
   text-align: center !important;
-}
+} */
 
 .bb-2 {
-  border: 2px solid #FFF !important;
+  border: 2px solid #fff !important;
 }
 
 .MuiTypography-noWrap {
