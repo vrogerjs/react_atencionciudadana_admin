@@ -101,7 +101,7 @@ export const Login = function ({ setToken }) {
     console.log('useEffect',location);
     if (code){
 
-      http.post('/api/auth/token', code,()=>{return {'Content-Type':'*/*'}}).then((data) => {
+      http.post(process.env.REACT_APP_BASE_URL+'/api/auth/token', code,()=>{return {'Content-Type':'*/*'}}).then((data) => {
        if (data.error) {
           setMsg(JSON.stringify(data.error));
         } else if (data.access_token||data.token) {
