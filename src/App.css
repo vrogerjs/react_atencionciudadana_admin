@@ -107,14 +107,14 @@ textarea {
   background-color: #f0f0f0 !important;
 }
 
-.mt-1 {
-  margin-top: 1em !important;
-}
-
-.text-center {
+.text-center,
+.center {
   text-align: center !important;
 }
 
+.right {
+  text-align: right;
+}
 .fw-bold {
   font-weight: bold !important;
 }
@@ -151,6 +151,27 @@ textarea {
 
 .mt-1 {
   margin-top: 1em !important;
+}
+
+.m-2 {
+  margin: 2em !important;
+}
+
+.m-1 {
+  margin: 1em !important;
+}
+
+.m-10px {
+  margin: 10px !important;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 50px;
+  padding: 10px;
+  margin: 10px;
 }
 
 .sidebar-gore {
@@ -193,4 +214,16 @@ header.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation4.MuiAppBar-root.MuiAp
 
 .MuiTypography-noWrap {
   white-space: unset !important;
+}
+
+@media print {
+  .no-imprimir {
+    display: none !important;
+  }
+
+  .padding-print {
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+    padding-top: 30px !important;
+  }
 }

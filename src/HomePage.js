@@ -182,17 +182,17 @@ const HomePage = ({ logOut, match }) => {
   const formRef = React.createRef();
 
   useEffect(() => {
-    const debouncedHandleResize = debounce((width, height) => {
-      const header = document.querySelector('.MuiToolbar-root');
-      const body = formRef.current;
-      if (body)
-        body.style.height = (height - header.offsetHeight * 0) + 'px';
-    });
-    debouncedHandleResize();
-    window.addEventListener('resize', debouncedHandleResize)
-    return _ => {
-      window.removeEventListener('resize', debouncedHandleResize)
-    }
+    // const debouncedHandleResize = debounce((width, height) => {
+    //   const header = document.querySelector('.MuiToolbar-root');
+    //   const body = formRef.current;
+    //   if (body)
+    //     body.style.height = (height - header.offsetHeight * 0) + 'px';
+    // });
+    // debouncedHandleResize();
+    // window.addEventListener('resize', debouncedHandleResize)
+    // return _ => {
+    //   window.removeEventListener('resize', debouncedHandleResize)
+    // }
   }, [location, formRef]);
 
   const drawerWidth = 240;

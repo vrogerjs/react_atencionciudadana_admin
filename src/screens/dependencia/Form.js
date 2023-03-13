@@ -55,7 +55,7 @@ export const Form = () => {
   useEffect(() => {
     if (pid) {
       if (networkStatus.connected) {
-        http.get(process.env.REACT_APP_BASE_URL + '/dependencia/' + pid).then((result) => {
+        http.get(process.env.REACT_APP_PATH + '/dependencia/' + pid).then((result) => {
           set(result);
         });
       }
@@ -65,10 +65,10 @@ export const Form = () => {
         if (s) {
           s = JSON.parse(s);
           var o2 = {};
-          o2.dependencia = s.dependencia;
+          o2.name = s.name;
           o2.abreviatura = s.abreviatura;
-          o2.nombaperesponsable = s.nombaperesponsable;
-          o2.cargoresponsable = s.cargoresponsable;
+          o2.apellidoNombreResponsable = s.apellidoNombreResponsable;
+          o2.cargoResponsable = s.cargoResponsable;
           set({ ...o, ...o2 });
         }
       } catch (e) {
@@ -104,7 +104,7 @@ export const Form = () => {
       var o2 = JSON.parse(JSON.stringify(o));
       if (networkStatus.connected) {
 
-        http.post(process.env.REACT_APP_BASE_URL + '/dependencia', o2).then(async (result) => {
+        http.post(process.env.REACT_APP_PATH + '/dependencia', o2).then(async (result) => {
           if (!o2._id) {
             if (result.id) {
               // navigate('/dependencia/' + result.id + '/edit', { replace: true });
@@ -169,12 +169,10 @@ export const Form = () => {
         <Box style={{ overflow: 'auto' }}>
 
           <Card className='mt-1 bs-black'>
-
             <CardContent>
               <Typography gutterBottom variant="h5" component="div" className='text-center fw-bold color-gore'>
                 DATOS DE LA DEPENDENCIA
               </Typography>
-
               <Typography variant="body2" color="text.secondary">
                 <Grid container>
                   <Grid item xs={12} md={12}>
@@ -193,11 +191,10 @@ export const Form = () => {
                           </InputAdornment>
                         ),
                       }}
-                      {...defaultProps("dependencia")}
+                      {...defaultProps("name")}
                     />
                   </Grid>
                 </Grid>
-
                 <Grid container>
                   <Grid item xs={12} md={12}>
                     <TextField
@@ -219,7 +216,6 @@ export const Form = () => {
                     />
                   </Grid>
                 </Grid>
-
                 <Grid container>
                   <Grid item xs={12} md={12}>
                     <TextField
@@ -237,11 +233,10 @@ export const Form = () => {
                           </InputAdornment>
                         ),
                       }}
-                      {...defaultProps("nombaperesponsable")}
+                      {...defaultProps("apellidoNombreResponsable")}
                     />
                   </Grid>
                 </Grid>
-
                 <Grid container>
                   <Grid item xs={12} md={12}>
                     <TextField
@@ -259,7 +254,7 @@ export const Form = () => {
                           </InputAdornment>
                         ),
                       }}
-                      {...defaultProps("cargoresponsable")}
+                      {...defaultProps("cargoResponsable")}
                     />
                   </Grid>
                 </Grid>
@@ -274,14 +269,14 @@ export const Form = () => {
           {getActions()}
         </Stack>
 
-        {(o._id || o.id) && <Fab color="primary" aria-label="add"
+        {/* {(o._id || o.id) && <Fab color="primary" aria-label="add"
           onClick={onClickAdd}
           style={{
             position: 'absolute',
             bottom: 80, right: 24
           }}>
           <AddIcon />
-        </Fab>}
+        </Fab>} */}
       </form>
     </ThemeProvider></LocalizationProvider>
   }

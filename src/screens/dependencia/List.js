@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { db } from '../../db';
 import {
   Button, Checkbox, Fab, styled, Table, TableCell, TextField, TablePagination,
-  TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid
+  TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid, CardContent, Card, Box
 } from '@mui/material';
 import { Autorenew } from '@mui/icons-material';
 import { http, useResize, useFormState } from 'gra-react-utils';
@@ -14,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   useNavigate
 } from "react-router-dom";
+import Typography from '@mui/material/Typography';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -102,7 +102,7 @@ const List = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await http.get(process.env.REACT_APP_BASE_URL + '/dependencia/' + page + '/' + state.rowsPerPage);
+      const result = await http.get(process.env.REACT_APP_PATH + '/dependencia/' + page + '/' + state.rowsPerPage);
       data.size = result.size;
       data.data = data.data.concat(result.content);
     }
@@ -126,7 +126,7 @@ const List = () => {
   }, [height, width]);
 
   useEffect(() => {
-    dispatch({ type: 'title', title: 'Administración de Tickets para Atención al Ciudadano - GORE Áncash' });
+    dispatch({ type: 'title', title: 'Gestión de Dependencias - GORE Áncash' });
     fetchData(state.page)
   }, [state.page, state.rowsPerPage]);
 
@@ -144,7 +144,7 @@ const List = () => {
     dispatch({
       type: "confirm", msg: 'Esta seguro de eliminar el registro seleccionado?', cb: (e) => {
         if (e) {
-          http.delete(process.env.REACT_APP_BASE_URL + '/dependencia/' + selected.join(',')).then((result) => {
+          http.delete(process.env.REACT_APP_PATH + '/dependencia/' + selected.join(',')).then((result) => {
 
             dispatch({ type: 'snack', msg: 'Registro' + (selected.length > 1 ? 's' : '') + ' eliminado!' });
             onClickRefresh();
@@ -161,117 +161,122 @@ const List = () => {
   }
   return (
     <>
-      <Toolbar className="Toolbar-table mt-1" direction="row" >
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={2}>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Button sx={{ width: 250, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="warning">Editar</Button>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Button sx={{ width: 250, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<DeleteIcon />} onClick={deleteOnClick} variant="contained" color="error">Eliminar</Button>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Button sx={{ width: 250, fontWeight: 'bold' }} onClick={onClickRefresh} endIcon={<Autorenew />} variant="contained" color="success">Actualizar</Button>
-          </Grid>
-          <Grid item xs={12} md={1}>
-          </Grid>
-        </Grid>
-      </Toolbar>
+      <Card>
+        <CardContent>
+          <Toolbar className="Toolbar-table" direction="row" >
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={2}>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="success">Editar</Button>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<DeleteIcon />} onClick={deleteOnClick} variant="contained" color="success">Eliminar</Button>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} endIcon={<Autorenew />} variant="contained" color="success">Actualizar</Button>
+              </Grid>
+              <Grid item xs={12} md={1}>
+              </Grid>
+            </Grid>
+          </Toolbar>
 
+          <TableContainer sx={{ maxWidth: '100%', mx: 'auto', maxHeight: '540px' }}>
+            {/* <Fab color="success" aria-label="add"
+              onClick={createOnClick}
+              style={{
+                position: 'absolute',
+                bottom: 72, right: 24
+              }}>
+              <AddIcon />
+            </Fab> */}
 
-      <TableContainer sx={{ maxHeight: '100%' }}>
-        <Fab color="success" aria-label="add"
-          onClick={createOnClick}
-          style={{
-            position: 'absolute',
-            bottom: 72, right: 24
-          }}>
-          <AddIcon />
-        </Fab>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell padding="checkbox" className='bg-gore border-table'>
-                <Checkbox
-                  style={{ color: 'white' }}
-                  indeterminate={selected.length > 0 && selected.length < result.data.length}
-                  checked={result && result.data.length > 0 && selected.length === result.data.length}
-                  onChange={onChangeAllRow}
-                  inputProps={{
-                    'aria-label': 'select all desserts',
-                  }}
-                />
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 260 }} className='bg-gore border-table'>Dependencia
-                {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 80 }} className='bg-gore border-table'>Abreviatura
-                {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 260 }} className='bg-gore border-table'>Responsable
-                {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 260 }} className='bg-gore border-table'>Cargo
-                {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(result && result.data && result.data.length ? result.data : [])
-              .map((row, index) => {
-                const isItemSelected = isSelected(toID(row));
-                return (
-                  <StyledTableRow
-                    style={{ backgroundColor: (1) ? '' : (index % 2 === 0 ? '#f1f19c' : '#ffffbb') }}
-                    hover
-                    onClick={(event) => onClickRow(event, toID(row))}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={index + ' ' + toID(row)}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox" className='border-table'>
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                      />
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell style={{ minWidth: '10%', maxWidth: '10%' }} padding="checkbox" className='bg-gore border-table'>
+                    <Checkbox
+                      style={{ color: 'white' }}
+                      indeterminate={selected.length > 0 && selected.length < result.data.length}
+                      checked={result && result.data.length > 0 && selected.length === result.data.length}
+                      onChange={onChangeAllRow}
+                      inputProps={{
+                        'aria-label': 'select all desserts',
+                      }}
+                    />
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: '30%', maxWidth: '30%' }} className='bg-gore border-table'>Dependencia
+                    {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='bg-gore border-table'>Abreviatura
+                    {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: '30%', maxWidth: '30%' }} className='bg-gore border-table'>Responsable
+                    {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: '30%', maxWidth: '15%' }} className='bg-gore border-table'>Cargo
+                    {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(result && result.data && result.data.length ? result.data : [])
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(toID(row));
+                    return (
+                      <StyledTableRow
+                        style={{ backgroundColor: (1) ? '' : (index % 2 === 0 ? '#f1f19c' : '#ffffbb') }}
+                        hover
+                        onClick={(event) => onClickRow(event, toID(row))}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={index + ' ' + toID(row)}
+                        selected={isItemSelected}
+                      >
+                        <TableCell style={{ minWidth: '10%', maxWidth: '10%' }} padding="checkbox" className='border-table'>
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                          />
+                        </TableCell>
+                        <TableCell style={{ minWidth: '30%', maxWidth: '30%' }} className='border-table' >
+                          {row.name}
+                        </TableCell>
+                        <TableCell style={{ minWidth: '30%', maxWidth: '15%' }} align="center">
+                          {row.abreviatura}
+                        </TableCell>
+                        <TableCell style={{ minWidth: '30%', maxWidth: '30%' }} className='border-table'>
+                          {row.apellidoNombreResponsable}
+                        </TableCell>
+                        <TableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='border-table'>
+                          {row.cargoResponsable}
+                        </TableCell>
+                      </StyledTableRow >
+                    );
+                  })}
+                {(!emptyRows) && (
+                  <TableRow style={{ height: 53 }}>
+                    <TableCell colSpan={7} >
+                      No data
                     </TableCell>
-                    <TableCell style={{ width: 260 }} className='border-table' >
-                      {row.dependencia}
-                    </TableCell>
-                    <TableCell style={{ width: 80 }} align="center">
-                      {row.abreviatura}
-                    </TableCell>
-                    <TableCell style={{ width: 260 }} className='border-table'>
-                      {row.nombaperesponsable}
-                    </TableCell>
-                    <TableCell style={{ width: 260 }} className='border-table'>
-                      {row.cargoresponsable}
-                    </TableCell>
-                  </StyledTableRow >
-                );
-              })}
-            {(!emptyRows) && (
-              <TableRow style={{ height: 53 }}>
-                <TableCell colSpan={7} >
-                  No data
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 20, 50]}
-        component="div"
-        count={result.size}
-        rowsPerPage={state.rowsPerPage}
-        page={state.page}
-        onPageChange={onPageChange}
-        onRowsPerPageChange={onRowsPerPageChange}
-      />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <TablePagination
+            rowsPerPageOptions={[10, 20, 50]}
+            component="div"
+            count={result.size}
+            rowsPerPage={state.rowsPerPage}
+            page={state.page}
+            onPageChange={onPageChange}
+            onRowsPerPageChange={onRowsPerPageChange}
+          />
+        </CardContent>
+      </Card>
     </>
   );
 

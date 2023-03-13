@@ -5,7 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { db } from '../../db';
 import {
   Button, Checkbox, Fab, styled, Table, TableCell, TextField, TablePagination,
-  TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid
+  TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid, CardContent, Card
 } from '@mui/material';
 import { Autorenew } from '@mui/icons-material';
 import { http, useResize, useFormState } from 'gra-react-utils';
@@ -102,7 +102,7 @@ const List = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const result = await http.get(process.env.REACT_APP_BASE_URL + '/cronograma/' + page + '/' + state.rowsPerPage);
+      const result = await http.get(process.env.REACT_APP_PATH + '/cronograma/' + page + '/' + state.rowsPerPage);
       data.size = result.size;
       data.data = data.data.concat(result.content);
     }
@@ -126,7 +126,7 @@ const List = () => {
   }, [height, width]);
 
   useEffect(() => {
-    dispatch({ type: 'title', title: 'Gestión de Cronogramas' });
+    dispatch({ type: 'title', title: 'Gestión de Cronogramas - GORE Áncash' });
     fetchData(state.page)
   }, [state.page, state.rowsPerPage]);
 
@@ -161,123 +161,125 @@ const List = () => {
   }
   return (
     <>
-      <Toolbar className="Toolbar-table mt-1" direction="row" >
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={2}>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Button sx={{ width: 250, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="warning">Editar</Button>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Button sx={{ width: 250, fontWeight: 'bold' }} disabled={!selected.length} startIcon={<DeleteIcon />} onClick={deleteOnClick} variant="contained" color="error">Eliminar</Button>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Button sx={{ width: 250, fontWeight: 'bold' }} onClick={onClickRefresh} endIcon={<Autorenew />} variant="contained" color="success">Actualizar</Button>
-          </Grid>
-          <Grid item xs={12} md={1}>
-          </Grid>
-        </Grid>
-      </Toolbar>
-
-
-      <TableContainer sx={{ maxHeight: '100%' }}>
-        <Fab color="success" aria-label="add"
-          onClick={createOnClick}
-          style={{
-            position: 'absolute',
-            bottom: 72, right: 24
-          }}>
-          <AddIcon />
-        </Fab>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell padding="checkbox" className='bg-gore border-table'>
-                <Checkbox
-                  style={{ color: 'white' }}
-                  indeterminate={selected.length > 0 && selected.length < result.data.length}
-                  checked={result && result.data.length > 0 && selected.length === result.data.length}
-                  onChange={onChangeAllRow}
-                  inputProps={{
-                    'aria-label': 'select all desserts',
-                  }}
-                />
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 300, maxWidth: 300 }} className='bg-gore border-table'>Dependencia
-                {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table'>Día
-                {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table'>Hora Inicio
-                {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table'>Hora Fin
-                {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table'>Total de Tickets
-                {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-              </StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(result && result.data && result.data.length ? result.data : [])
-              .map((row, index) => {
-                const isItemSelected = isSelected(toID(row));
-                return (
-                  <StyledTableRow
-                    style={{ backgroundColor: (1) ? '' : (index % 2 === 0 ? '#f1f19c' : '#ffffbb') }}
-                    hover
-                    onClick={(event) => onClickRow(event, toID(row))}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={index + ' ' + toID(row)}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox" className='border-table'>
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                      />
+      <Card>
+        <CardContent>
+          <Toolbar className="Toolbar-table" direction="row" >
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={2}>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={editOnClick} variant="contained" color="success">Editar</Button>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<DeleteIcon />} onClick={deleteOnClick} variant="contained" color="success">Eliminar</Button>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} endIcon={<Autorenew />} variant="contained" color="success">Actualizar</Button>
+              </Grid>
+              <Grid item xs={12} md={1}>
+              </Grid>
+            </Grid>
+          </Toolbar>
+          <TableContainer sx={{ maxWidth: '100%', mx: 'auto', maxHeight: '540px' }}>
+            <Fab color="success" aria-label="add"
+              onClick={createOnClick}
+              style={{
+                position: 'absolute',
+                bottom: 72, right: 24
+              }}>
+              <AddIcon />
+            </Fab>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell padding="checkbox" className='bg-gore border-table'>
+                    <Checkbox
+                      style={{ color: 'white' }}
+                      indeterminate={selected.length > 0 && selected.length < result.data.length}
+                      checked={result && result.data.length > 0 && selected.length === result.data.length}
+                      onChange={onChangeAllRow}
+                      inputProps={{
+                        'aria-label': 'select all desserts',
+                      }}
+                    />
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: '30%', maxWidth: '30%' }} className='bg-gore border-table'>Dependencia
+                    {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='bg-gore border-table'>Día
+                    {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='bg-gore border-table'>Hora Inicio
+                    {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='bg-gore border-table'>Hora Fin
+                    {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='bg-gore border-table'>Total de Tickets
+                    {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(result && result.data && result.data.length ? result.data : [])
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(toID(row));
+                    return (
+                      <StyledTableRow
+                        style={{ backgroundColor: (1) ? '' : (index % 2 === 0 ? '#f1f19c' : '#ffffbb') }}
+                        hover
+                        onClick={(event) => onClickRow(event, toID(row))}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={index + ' ' + toID(row)}
+                        selected={isItemSelected}
+                      >
+                        <TableCell padding="checkbox" className='border-table'>
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                          />
+                        </TableCell>
+                        <TableCell style={{ width: '30%', maxWidth: '30%' }} className='border-table' >
+                          {row.dependencia.name}
+                        </TableCell>
+                        <TableCell style={{ minWidth: '15%', maxWidth: '15%' }} align="center">
+                          {row.texto}
+                        </TableCell>
+                        <TableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='border-table' align="center">
+                          {row.horaIni}
+                        </TableCell>
+                        <TableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='border-table' align="center">
+                          {row.horaFin}
+                        </TableCell>
+                        <TableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='border-table' align="center">
+                          {row.limite}
+                        </TableCell>
+                      </StyledTableRow >
+                    );
+                  })}
+                {(!emptyRows) && (
+                  <TableRow style={{ height: 53 }}>
+                    <TableCell colSpan={7} >
+                      No data
                     </TableCell>
-                    <TableCell style={{ width: 300, maxWidth: 300 }} className='border-table' >
-                      {row.dependencia.dependencia}
-                    </TableCell>
-                    <TableCell style={{ minWidth: 150, maxWidth: 150 }} align="center">
-                      {row.texto}
-                    </TableCell>
-                    <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table'>
-                      {row.horaini}
-                    </TableCell>
-                    <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table'>
-                      {row.horafin}
-                    </TableCell>
-                    <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table'>
-                      {row.limite}
-                    </TableCell>
-                  </StyledTableRow >
-                );
-              })}
-            {(!emptyRows) && (
-              <TableRow style={{ height: 53 }}>
-                <TableCell colSpan={7} >
-                  No data
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 20, 50]}
-        component="div"
-        count={result.size}
-        rowsPerPage={state.rowsPerPage}
-        page={state.page}
-        onPageChange={onPageChange}
-        onRowsPerPageChange={onRowsPerPageChange}
-      />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 20, 50]}
+            component="div"
+            count={result.size}
+            rowsPerPage={state.rowsPerPage}
+            page={state.page}
+            onPageChange={onPageChange}
+            onRowsPerPageChange={onRowsPerPageChange}
+          />
+        </CardContent>
+      </Card>
     </>
   );
 

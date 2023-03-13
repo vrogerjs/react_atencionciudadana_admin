@@ -1,35 +1,21 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { useFormState, useResize, http } from 'gra-react-utils';
-import { VRadioGroup } from '../../utils/useToken';
 import { db } from '../../db';
-
 import {
-  ExpandMore as ExpandMoreIcon,
   Send as SendIcon,
   Add as AddIcon,
-  Room as RoomIcon,
-  Search as SearchIcon,
-  Keyboard,
-  ReplyAll,
-  WifiProtectedSetup
+  Keyboard
 } from '@mui/icons-material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
-  Accordion, AccordionSummary, AccordionDetails, Alert,
-  Box, Button, Card, CardContent, Checkbox, Fab,
-  FormControl, FormControlLabel, FormGroup, FormLabel, MenuItem, Radio,
-  Stack, InputAdornment, IconButton, TextField, Grid, Typography
+  Box, Button, Card, CardContent, Fab, MenuItem, Stack, InputAdornment, TextField, Grid, Typography
 } from '@mui/material';
-import {
-  useNavigate, useParams, useLocation
-} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Geolocation } from '@capacitor/geolocation';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { ClockPicker } from '@mui/x-date-pickers/ClockPicker';
+import Select from '@mui/material/Select';
 
 export const Form = () => {
 
@@ -51,6 +37,10 @@ export const Form = () => {
 
   }, {});
 
+  const [d] = useFormState(useState, {
+
+  }, {});
+
   let days = { 2: 'Lunes', 3: 'Martes', 4: 'Miercoles', 5: 'Jueves', 6: 'Viernes' };
 
   useEffect(() => {
@@ -65,12 +55,11 @@ export const Form = () => {
   useEffect(() => {
     if (pid) {
       if (networkStatus.connected) {
-        http.get(process.env.REACT_APP_BASE_URL + '/cronograma/' + pid).then((result) => {
-          result.dependencia = result.dependencia.id;
-          var target = new Date("2023-08-02T" + result.horaini);
-          result.horaini = target;
-          var target = new Date("2023-08-02T" + result.horafin);
-          result.horafin = target;
+        http.get(process.env.REACT_APP_PATH + '/cronograma/' + pid).then((result) => {
+          var target = new Date("2023-08-02T" + result.horaIni);
+          result.horaIni = target;
+          var target = new Date("2023-08-02T" + result.horaFin);
+          result.horaFin = target;
           set(result);
         });
       }
@@ -112,8 +101,8 @@ export const Form = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const resultD = await (http.get(process.env.REACT_APP_BASE_URL +'/dependencia'));
-      setDependencias(resultD);
+      const resultD = await (http.get(process.env.REACT_APP_BASE_URL + '/admin/directory/api/dependency/0/0'));
+      setDependencias(resultD.data);
     }
   };
 
@@ -125,21 +114,33 @@ export const Form = () => {
     navigate('/dependencia/create', { replace: true });
   }
 
-  const onClickSave = async () => {
+  const onChangeDependencia = (event) => {
+    var dep = dependencias.find((e) => o.dependencia.id == e.id);
+    o.dependencia = {
+      id: dep.id,
+      name: dep.fullName,
+      abreviatura: dep.type.abreviatura
+    };
 
+  };
+
+  const onClickSave = async () => {
+    console.log(o);
     const form = formRef.current;
     if (0 || form != null && validate(form)) {
-      horaini = o.horaini.toDate ? o.horaini.toDate() : o.horaini;
-      horafin = o.horafin.toDate ? o.horafin.toDate() : o.horafin;
+      //let res=await http.post(process.env.REACT_APP_PATH + '/dependencia', { id:d.idDep, idDep: d.idDep, name: d.name, abreviatura: d.abreviatura });
+      
+      onChangeDependencia();
+      horaIni = o.horaIni.toDate ? o.horaIni.toDate() : o.horaIni;
+      horaFin = o.horaFin.toDate ? o.horaFin.toDate() : o.horaFin;
 
-      var horaini = pad(horaini.getHours(), 2) + ":" + pad(horaini.getMinutes(), 2) + ":" + pad(horaini.getSeconds(), 2);
-      var horafin = pad(horafin.getHours(), 2) + ":" + pad(horafin.getMinutes(), 2) + ":" + pad(horafin.getSeconds(), 2);
+      var horaIni = pad(horaIni.getHours(), 2) + ":" + pad(horaIni.getMinutes(), 2) + ":" + pad(horaIni.getSeconds(), 2);
+      var horaFin = pad(horaFin.getHours(), 2) + ":" + pad(horaFin.getMinutes(), 2) + ":" + pad(horaFin.getSeconds(), 2);
 
-      var o2 = { ...o, horaini: horaini, horafin: horafin, texto: days[o.dia] };
+      var o2 = { ...o, horaIni: horaIni, horaFin: horaFin, texto: days[o.dia] };
 
       if (networkStatus.connected) {
-        o2.dependencia = { id: o.dependencia };
-        http.post(process.env.REACT_APP_BASE_URL +'/cronograma', o2).then(async (result) => {
+        http.post(process.env.REACT_APP_PATH + '/cronograma', o2).then(async (result) => {
           if (!o2._id) {
             if (result.id) {
               // navigate('/dependencia/' + result.id + '/edit', { replace: true });
@@ -191,18 +192,17 @@ export const Form = () => {
     </>
   }
 
-  function onChangeHoraini(v) {
-    set(o => ({ ...o, horaini: v }), () => {
-      o.horaini = v;
+  function onChangehoraIni(v) {
+    set(o => ({ ...o, horaIni: v }), () => {
+      o.horaIni = v;
     });
 
   }
 
-  function onChangeHorafin(v) {
-    set(o => ({ ...o, horafin: v }), () => {
-      o.horafin = v;
+  function onChangehoraFin(v) {
+    set(o => ({ ...o, horaFin: v }), () => {
+      o.horaFin = v;
     });
-
   }
 
   function getContent() {
@@ -213,17 +213,14 @@ export const Form = () => {
           <Card className='mt-1 bs-black'>
 
             <CardContent>
-              <Typography gutterBottom variant="h5" component="div" className='text-center fw-bold color-gore'>
+              <Typography gutterBottom variant="h5" className='text-center fw-bold color-gore'>
                 DATOS DEL CRONOGRAMA
               </Typography>
 
-              <Typography variant="body2" color="text.secondary">
+            
                 <Grid container>
                   <Grid item xs={12} md={12}>
-                    <TextField
-                      className='select'
-                      select
-                      margin="normal"
+                    <Select
                       required
                       fullWidth
                       id="standard-name"
@@ -235,14 +232,14 @@ export const Form = () => {
                           </InputAdornment>
                         ),
                       }}
-                      {...defaultProps("dependencia")}
+                      {...defaultProps("dependencia.id", { onChange: onChangeDependencia })}
                     >
                       {dependencias.map((item, i) => (
                         <MenuItem key={item.id} value={item.id}>
-                          {item.dependencia}
+                          {item.fullName}
                         </MenuItem>
                       ))}
-                    </TextField>
+                    </Select>
                   </Grid>
                 </Grid>
 
@@ -251,7 +248,7 @@ export const Form = () => {
                     <TextField
                       className='select'
                       select
-                      margin="normal"
+           
                       required
                       fullWidth
                       id="standard-name"
@@ -287,11 +284,11 @@ export const Form = () => {
                       inputFormat="HH:mm:ss"
                       mask="__:__:__"
                       label="Hora Inicio:"
-                      onChange={onChangeHoraini}
-                      value={o.horaini || ''}
+                      onChange={onChangehoraIni}
+                      value={o.horaIni || ''}
                       renderInput={(params) =>
                         <TextField
-                          margin="normal"
+                       
                           required={false}
                           fullWidth
                           size="medium"
@@ -316,11 +313,11 @@ export const Form = () => {
                       inputFormat="HH:mm:ss"
                       mask="__:__:__"
                       label="Hora Fin:"
-                      onChange={onChangeHorafin}
-                      value={o.horafin || ''}
+                      onChange={onChangehoraFin}
+                      value={o.horaFin || ''}
                       renderInput={(params) =>
                         <TextField
-                          margin="normal"
+                        
                           required={false}
                           fullWidth
                           size="medium"
@@ -341,7 +338,7 @@ export const Form = () => {
                 <Grid container>
                   <Grid item xs={12} md={12}>
                     <TextField
-                      margin="normal"
+                   
                       required
                       fullWidth
                       size="medium"
@@ -360,7 +357,7 @@ export const Form = () => {
                   </Grid>
                 </Grid>
 
-              </Typography>
+              
             </CardContent>
           </Card>
 
