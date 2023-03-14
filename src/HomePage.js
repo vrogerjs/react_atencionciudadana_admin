@@ -89,20 +89,20 @@ const HomePage = ({ logOut, match }) => {
 
   const items = [
     {
-      perms: 'DISABLED_REGISTER', text: 'Gestión de Dependencias', icon: <QuizIcon />, path: '/dependencia', items: [
+      perms: 'ADMIN_ATENCIONCIUDANANA', text: 'Gestión de Dependencias', icon: <QuizIcon />, path: '/dependencia', items: [
         { text: 'Agregar', icon: <AddIcon />, path: '/dependencia/create' }
       ]
     },
     {
-      perms: 'DISABLED_REGISTER', text: 'Gestión de Cronograma', icon: <QuizIcon />, path: '/cronograma', items: [
+      perms: 'ADMIN_ATENCIONCIUDANANA', text: 'Gestión de Cronograma', icon: <QuizIcon />, path: '/cronograma', items: [
         { text: 'Agregar', icon: <AddIcon />, path: '/cronograma/create' }
       ]
     },
     {
-      perms: 'DISABLED_REGISTER', text: 'Atenciones Pendientes', icon: <QuizIcon />, path: '/atencion'
+      perms: 'REGISTER_ATENCIONCIUDANANA', text: 'Atenciones Pendientes', icon: <QuizIcon />, path: '/atencion'
     },
     {
-      perms: 'DISABLED_REGISTER', text: 'Atenciones Finalizadas', icon: <QuizIcon />, path: '/atencion/finalizada'
+      perms: 'REGISTER_ATENCIONCIUDANANA', text: 'Atenciones Finalizadas', icon: <QuizIcon />, path: '/atencion/finalizada'
     },
     {
       text: 'Salir', icon: <LogoutIcon />, onClick: () => {
@@ -123,7 +123,8 @@ const HomePage = ({ logOut, match }) => {
             // maxWidth: { xs: 350, md: 250 },
           }}
           alt="Logo GORE Áncash."
-          src="https://web.regionancash.gob.pe/fs/images/logo2018.png"
+          // src="https://web.regionancash.gob.pe/fs/images/logo2018.png"
+          src={process.env.PUBLIC_URL + "/logo20181.png"}
         />
       </Toolbar>
       <Divider />
