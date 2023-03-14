@@ -101,7 +101,7 @@ export const Form = () => {
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
-      const resultD = await (http.get(process.env.REACT_APP_BASE_URL + '/admin/directory/api/dependency/0/0'));
+      const resultD = await (http.get('https://web.regionancash.gob.pe/admin/directory/api/dependency/0/0'));
       setDependencias(resultD.data);
     }
   };
@@ -129,7 +129,7 @@ export const Form = () => {
     const form = formRef.current;
     if (0 || form != null && validate(form)) {
       //let res=await http.post(process.env.REACT_APP_PATH + '/dependencia', { id:d.idDep, idDep: d.idDep, name: d.name, abreviatura: d.abreviatura });
-      
+
       onChangeDependencia();
       horaIni = o.horaIni.toDate ? o.horaIni.toDate() : o.horaIni;
       horaFin = o.horaFin.toDate ? o.horaFin.toDate() : o.horaFin;
@@ -217,147 +217,147 @@ export const Form = () => {
                 DATOS DEL CRONOGRAMA
               </Typography>
 
-            
-                <Grid container>
-                  <Grid item xs={12} md={12}>
-                    <Select
-                      required
-                      fullWidth
-                      id="standard-name"
-                      label="Seleccione la Dependencia: "
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Keyboard />
-                          </InputAdornment>
-                        ),
-                      }}
-                      {...defaultProps("dependencia.id", { onChange: onChangeDependencia })}
-                    >
-                      {dependencias.map((item, i) => (
-                        <MenuItem key={item.id} value={item.id}>
-                          {item.fullName}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </Grid>
+
+              <Grid container>
+                <Grid item xs={12} md={12}>
+                  <Select
+                    required
+                    fullWidth
+                    id="standard-name"
+                    label="Seleccione la Dependencia: "
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Keyboard />
+                        </InputAdornment>
+                      ),
+                    }}
+                    {...defaultProps("dependencia.id", { onChange: onChangeDependencia })}
+                  >
+                    {dependencias.map((item, i) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.fullName}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </Grid>
+              </Grid>
 
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={4}>
-                    <TextField
-                      className='select'
-                      select
-           
-                      required
-                      fullWidth
-                      id="standard-name"
-                      label="Seleccione el día de la Semana: "
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Keyboard />
-                          </InputAdornment>
-                        ),
-                      }}
-                      {...defaultProps("dia")}
-                    >
-                      {Object.keys(days).map((key) => (
-                        <MenuItem key={key} value={key}>
-                          {days[key]}
-                        </MenuItem>
-                      ))}
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    className='select'
+                    select
 
-                      {/* <MenuItem value={2}>Lunes</MenuItem>
+                    required
+                    fullWidth
+                    id="standard-name"
+                    label="Seleccione el día de la Semana: "
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Keyboard />
+                        </InputAdornment>
+                      ),
+                    }}
+                    {...defaultProps("dia")}
+                  >
+                    {Object.keys(days).map((key) => (
+                      <MenuItem key={key} value={key}>
+                        {days[key]}
+                      </MenuItem>
+                    ))}
+
+                    {/* <MenuItem value={2}>Lunes</MenuItem>
                       <MenuItem value={3}>Martes</MenuItem>
                       <MenuItem value={4}>Miercoles</MenuItem>
                       <MenuItem value={5}>Jueves</MenuItem>
                       <MenuItem value={6}>Viernes</MenuItem> */}
-                    </TextField>
-                  </Grid>
-
-                  <Grid item xs={12} md={4}>
-                    <TimePicker
-                      ampm={false}
-                      openTo="hours"
-                      views={['hours', 'minutes', 'seconds']}
-                      inputFormat="HH:mm:ss"
-                      mask="__:__:__"
-                      label="Hora Inicio:"
-                      onChange={onChangehoraIni}
-                      value={o.horaIni || ''}
-                      renderInput={(params) =>
-                        <TextField
-                       
-                          required={false}
-                          fullWidth
-                          size="medium"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <Keyboard />
-                              </InputAdornment>
-                            ),
-                          }}
-                          {...params}
-                        />
-                      }
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} md={4}>
-                    <TimePicker
-                      ampm={false}
-                      openTo="hours"
-                      views={['hours', 'minutes', 'seconds']}
-                      inputFormat="HH:mm:ss"
-                      mask="__:__:__"
-                      label="Hora Fin:"
-                      onChange={onChangehoraFin}
-                      value={o.horaFin || ''}
-                      renderInput={(params) =>
-                        <TextField
-                        
-                          required={false}
-                          fullWidth
-                          size="medium"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <Keyboard />
-                              </InputAdornment>
-                            ),
-                          }}
-                          {...params}
-                        />
-                      }
-                    />
-                  </Grid>
+                  </TextField>
                 </Grid>
 
-                <Grid container>
-                  <Grid item xs={12} md={12}>
-                    <TextField
-                   
-                      required
-                      fullWidth
-                      size="medium"
-                      id="standard-name"
-                      label="Ingrese la cantidad máxima de tickets a generar: "
-                      placeholder="Cantidad máxima"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Keyboard />
-                          </InputAdornment>
-                        ),
-                      }}
-                      {...defaultProps("limite")}
-                    />
-                  </Grid>
+                <Grid item xs={12} md={4}>
+                  <TimePicker
+                    ampm={false}
+                    openTo="hours"
+                    views={['hours', 'minutes', 'seconds']}
+                    inputFormat="HH:mm:ss"
+                    mask="__:__:__"
+                    label="Hora Inicio:"
+                    onChange={onChangehoraIni}
+                    value={o.horaIni || ''}
+                    renderInput={(params) =>
+                      <TextField
+
+                        required={false}
+                        fullWidth
+                        size="medium"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Keyboard />
+                            </InputAdornment>
+                          ),
+                        }}
+                        {...params}
+                      />
+                    }
+                  />
                 </Grid>
 
-              
+                <Grid item xs={12} md={4}>
+                  <TimePicker
+                    ampm={false}
+                    openTo="hours"
+                    views={['hours', 'minutes', 'seconds']}
+                    inputFormat="HH:mm:ss"
+                    mask="__:__:__"
+                    label="Hora Fin:"
+                    onChange={onChangehoraFin}
+                    value={o.horaFin || ''}
+                    renderInput={(params) =>
+                      <TextField
+
+                        required={false}
+                        fullWidth
+                        size="medium"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Keyboard />
+                            </InputAdornment>
+                          ),
+                        }}
+                        {...params}
+                      />
+                    }
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container>
+                <Grid item xs={12} md={12}>
+                  <TextField
+
+                    required
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Ingrese la cantidad máxima de tickets a generar: "
+                    placeholder="Cantidad máxima"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Keyboard />
+                        </InputAdornment>
+                      ),
+                    }}
+                    {...defaultProps("limite")}
+                  />
+                </Grid>
+              </Grid>
+
+
             </CardContent>
           </Card>
 
