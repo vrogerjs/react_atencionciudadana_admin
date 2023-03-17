@@ -69,6 +69,7 @@ export const Form = () => {
           o2.abreviatura = s.abreviatura;
           o2.apellidoNombreResponsable = s.apellidoNombreResponsable;
           o2.cargoResponsable = s.cargoResponsable;
+          o2.emailResponsable = s.emailResponsable;
           set({ ...o, ...o2 });
         }
       } catch (e) {
@@ -167,101 +168,118 @@ export const Form = () => {
     return <LocalizationProvider dateAdapter={AdapterDayjs}><ThemeProvider theme={theme}>
       <form ref={formRef} onSubmit={onSubmit} style={{ textAlign: 'left' }}>
         <Box style={{ overflow: 'auto' }}>
-
           <Card className='mt-1 bs-black'>
             <CardContent>
               <Typography gutterBottom variant="h5" component="div" className='text-center fw-bold color-gore'>
                 DATOS DE LA DEPENDENCIA
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                <Grid container>
-                  <Grid item xs={12} md={12}>
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      size="medium"
-                      id="standard-name"
-                      label="Ingrese el nombre de la Dependencia: "
-                      placeholder="Dependencia"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Keyboard />
-                          </InputAdornment>
-                        ),
-                      }}
-                      {...defaultProps("name")}
-                    />
-                  </Grid>
+              <Grid container>
+                <Grid item xs={12} md={12}>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Ingrese el nombre de la Dependencia: "
+                    placeholder="Dependencia"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Keyboard />
+                        </InputAdornment>
+                      ),
+                    }}
+                    {...defaultProps("name")}
+                  />
                 </Grid>
-                <Grid container>
-                  <Grid item xs={12} md={12}>
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      size="medium"
-                      id="standard-name"
-                      label="Ingrese la abreviatura de la Dependencia: "
-                      placeholder="Abreviatura"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Keyboard />
-                          </InputAdornment>
-                        ),
-                      }}
-                      {...defaultProps("abreviatura")}
-                    />
-                  </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} md={12}>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Ingrese la abreviatura de la Dependencia: "
+                    placeholder="Abreviatura"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Keyboard />
+                        </InputAdornment>
+                      ),
+                    }}
+                    {...defaultProps("abreviatura", { required: false })}
+                  />
                 </Grid>
-                <Grid container>
-                  <Grid item xs={12} md={12}>
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      size="medium"
-                      id="standard-name"
-                      label="Ingrese los apellidos y nombres del Responsable: "
-                      placeholder="Responsable"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Keyboard />
-                          </InputAdornment>
-                        ),
-                      }}
-                      {...defaultProps("apellidoNombreResponsable")}
-                    />
-                  </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} md={12}>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Ingrese los apellidos y nombres del Responsable: "
+                    placeholder="Responsable"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Keyboard />
+                        </InputAdornment>
+                      ),
+                    }}
+                    {...defaultProps("apellidoNombreResponsable", { required: false })}
+                  />
                 </Grid>
-                <Grid container>
-                  <Grid item xs={12} md={12}>
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      size="medium"
-                      id="standard-name"
-                      label="Ingrese el cargo del Responsable: "
-                      placeholder="Cargo"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Keyboard />
-                          </InputAdornment>
-                        ),
-                      }}
-                      {...defaultProps("cargoResponsable")}
-                    />
-                  </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} md={12}>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Ingrese el cargo del Responsable: "
+                    placeholder="Cargo"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Keyboard />
+                        </InputAdornment>
+                      ),
+                    }}
+                    {...defaultProps("cargoResponsable", { required: false })}
+                  />
                 </Grid>
-              </Typography>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} md={12}>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    size="medium"
+                    id="standard-name"
+                    label="Ingrese el email del Responsable: "
+                    placeholder="Email"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Keyboard />
+                        </InputAdornment>
+                      ),
+                    }}
+                    {...defaultProps("emailResponsable")}
+                  />
+                </Grid>
+              </Grid>
             </CardContent>
           </Card>
-
         </Box>
         <Stack direction="row" justifyContent="center"
           style={{ padding: '10px', backgroundColor: '#0f62ac' }}

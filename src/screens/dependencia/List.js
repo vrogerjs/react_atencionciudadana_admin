@@ -205,16 +205,19 @@ const List = () => {
                       }}
                     />
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: '30%', maxWidth: '30%' }} className='bg-gore border-table'>Dependencia
+                  <StyledTableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='bg-gore border-table'>Dependencia
                     {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
                   <StyledTableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='bg-gore border-table'>Abreviatura
                     {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: '30%', maxWidth: '30%' }} className='bg-gore border-table'>Responsable
+                  <StyledTableCell style={{ minWidth: '20%', maxWidth: '30%' }} className='bg-gore border-table'>Responsable
                     {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: '30%', maxWidth: '15%' }} className='bg-gore border-table'>Cargo
+                  <StyledTableCell style={{ minWidth: '20%', maxWidth: '15%' }} className='bg-gore border-table'>Cargo
+                    {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                  </StyledTableCell>
+                  <StyledTableCell style={{ minWidth: '20%', maxWidth: '15%' }} className='bg-gore border-table'>Email
                     {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                   </StyledTableCell>
                 </TableRow>
@@ -240,17 +243,20 @@ const List = () => {
                             checked={isItemSelected}
                           />
                         </TableCell>
-                        <TableCell style={{ minWidth: '30%', maxWidth: '30%' }} className='border-table' >
+                        <TableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='border-table' >
                           {row.name}
                         </TableCell>
-                        <TableCell style={{ minWidth: '30%', maxWidth: '15%' }} align="center">
+                        <TableCell style={{ minWidth: '15%', maxWidth: '15%' }} align="center">
                           {row.abreviatura}
                         </TableCell>
-                        <TableCell style={{ minWidth: '30%', maxWidth: '30%' }} className='border-table'>
+                        <TableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='border-table'>
                           {row.apellidoNombreResponsable}
                         </TableCell>
-                        <TableCell style={{ minWidth: '15%', maxWidth: '15%' }} className='border-table'>
+                        <TableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='border-table'>
                           {row.cargoResponsable}
+                        </TableCell>
+                        <TableCell style={{ minWidth: '20%', maxWidth: '20%' }} className='border-table'>
+                          {row.emailResponsable}
                         </TableCell>
                       </StyledTableRow >
                     );

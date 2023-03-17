@@ -167,7 +167,7 @@ const List = () => {
     dispatch({
       type: "confirm", msg: 'Se realizo la atención al registro seleccionado?', cb: (e) => {
         if (e) {
-          http.put(process.env.REACT_APP_PATH + '/atencion/' + selected[0], { activo: 0, horafin: hora }).then(e => {
+          http.put(process.env.REACT_APP_PATH + '/atencion/' + selected[0], { activo: 0, horaFin: hora }).then(e => {
             navigate('/atencion');
             dispatch({ type: "snack", msg: 'Ciudadano atendido satisfactoriamente!' });
           });
