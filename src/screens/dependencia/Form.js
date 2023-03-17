@@ -174,7 +174,7 @@ export const Form = () => {
                 DATOS DE LA DEPENDENCIA
               </Typography>
               <Grid container>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12} sm={12} md={12}>
                   <TextField
                     margin="normal"
                     required

@@ -216,8 +216,6 @@ export const Form = () => {
               <Typography gutterBottom variant="h5" className='text-center fw-bold color-gore'>
                 DATOS DEL CRONOGRAMA
               </Typography>
-
-
               <Grid container>
                 <Grid item xs={12} md={12}>
                   <Select

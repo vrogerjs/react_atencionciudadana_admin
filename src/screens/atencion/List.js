@@ -13,6 +13,9 @@ import {
   useNavigate
 } from "react-router-dom";
 import { useReactToPrint } from 'react-to-print';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -146,7 +149,7 @@ const List = () => {
     fetchData(state.page)
   }, [state.page, state.rowsPerPage]);
 
-  const [o, { defaultProps }] = useFormState(useState, {}, {});
+  const [o, { defaultProps, set }] = useFormState(useState, {}, {});
 
   useEffect(() => {
     // if(o.dependencia)
@@ -163,7 +166,6 @@ const List = () => {
   const atenderOnClick = () => {
     var hoy = new Date();
     var hora = pad(hoy.getHours(), 2) + ':' + pad(hoy.getMinutes(), 2) + ':' + pad(hoy.getSeconds(), 2);
-
     dispatch({
       type: "confirm", msg: 'Se realizo la atención al registro seleccionado?', cb: (e) => {
         if (e) {
@@ -176,174 +178,219 @@ const List = () => {
     });
   };
 
+  function onChangeFecha(v) {
+    set(o => ({ ...o, fecha: v }));
+    o.fecha = v;
+
+    var fecha = o.fecha.toDate ? o.fecha.toDate() : o.fecha;
+    var day = pad(fecha.getDate(), 2);
+    var month = pad(fecha.getMonth() + 1, 2);
+    var year = fecha.getFullYear();
+
+    o.fecha = year + '-' + month + '-' + day;
+    fetchData(state.page);
+
+    console.log(o);
+
+  }
+
   const toID = (row) => {
     return row._id && row._id.$oid ? row._id.$oid : row.id;
   }
   return (
     <>
-      <Card>
-        <CardContent>
-          <Toolbar className="Toolbar-table" direction="row" >
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Card>
+          <CardContent>
+            <Toolbar className="Toolbar-table" direction="row" >
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={2}>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={atenderOnClick} variant="contained" color="success">Atender</Button>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} endIcon={<Autorenew />} variant="contained" color="success">Actualizar</Button>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<PictureAsPdf />} onClick={printOnClick} variant="contained" color="error">Imprimir</Button>
+                </Grid>
+              </Grid>
+            </Toolbar>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={2}>
+              <Grid item xs={12} sm={12} md={9} className='mb-2'>
+                <TextField
+                  className='select'
+                  select
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="standard-name"
+                  label="Seleccione la Dependencia a realizar la Busqueda: "
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Keyboard />
+                      </InputAdornment>
+                    ),
+                  }}
+                  {...defaultProps("dependencia")}
+                >
+                  {dependencias.map((item, i) => (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
-              <Grid item xs={12} md={3}>
-                <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={atenderOnClick} variant="contained" color="success">Atender</Button>
-              </Grid>
-              <Grid item xs={12} md={3}>
-                <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} endIcon={<Autorenew />} variant="contained" color="success">Actualizar</Button>
-              </Grid>
-              <Grid item xs={12} md={3}>
-                <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<PictureAsPdf />} onClick={printOnClick} variant="contained" color="error">Imprimir</Button>
-              </Grid>
-            </Grid>
-          </Toolbar>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={12} className='mb-2'>
-              <TextField
-                className='select'
-                select
-                margin="normal"
-                required
-                fullWidth
-                id="standard-name"
-                label="Seleccione la Dependencia a realizar la Busqueda: "
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Keyboard />
-                    </InputAdornment>
-                  ),
-                }}
-                {...defaultProps("dependencia")}
-              >
-                {dependencias.map((item, i) => (
-                  <MenuItem key={item.id} value={item.id}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-          </Grid>
-          <TableContainer sx={{ maxWidth: '100%', mx: 'auto', maxHeight: '540px' }}>
-            <Table stickyHeader aria-label="sticky table" ref={componentRef} className='padding-print'>
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell padding="checkbox" className='bg-gore border-table text-table'>
-                    <Checkbox
-                      style={{ color: 'white' }}
-                      indeterminate={selected.length > 0 && selected.length < result.data.length}
-                      checked={result && result.data.length > 0 && selected.length === result.data.length}
-                      onChange={onChangeAllRow}
-                      inputProps={{
-                        'aria-label': 'select all desserts',
+              <Grid item xs={12} sm={12} md={3} className='mb-2'>
+                <DesktopDatePicker
+                  label="Ingrese la Fecha."
+                  inputFormat="DD/MM/YYYY"
+                  value={o.fecha || ''}
+                  onChange={onChangeFecha}
+                  renderInput={(params) =>
+                    <TextField
+                      type={'number'}
+                      sx={{ fontWeight: 'bold' }}
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="standard-name"
+                      label="Fecha: "
+                      placeholder="Ingrese su Fecha."
+                      // onKeyUp={onKeyUp}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Keyboard />
+                          </InputAdornment>
+                        ),
                       }}
-                    />
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 80, maxWidth: 80 }} className='bg-gore border-table text-table'>Nº Expediente
-                    {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 80, maxWidth: 80 }} className='bg-gore border-table text-table'>Nº Documento
-                    {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table text-table'>Apellidos y Nombres
-                    {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Razon Social
-                    {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 80, maxWidth: 80 }} className='bg-gore border-table text-table'>Nº Celular
-                    {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table text-table'>Dependencia
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Fecha
-                    {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Hora de Cita
-                    {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-                  </StyledTableCell>
-                  <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Firma
-                    {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
-                  </StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {(result && result.data && result.data.length ? result.data : []).
-                  map((row, index) => {
-                    const isItemSelected = isSelected(toID(row));
-                    return (
-                      <StyledTableRow
-                        style={{ backgroundColor: (1) ? '' : (index % 2 === 0 ? '#f1f19c' : '#ffffbb') }}
-                        hover
-                        onClick={(event) => onClickRow(event, toID(row))}
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={index + ' ' + toID(row)}
-                        selected={isItemSelected}
-                      >
-                        <TableCell padding="checkbox" className='border-table text-table'>
-                          <Checkbox
-                            color="primary"
-                            checked={isItemSelected}
-                          />
-                        </TableCell>
-                        <TableCell style={{ minWidth: 80, maxWidth: 80 }} className='border-table text-table' align="center">
-                          {row.nroExpediente}
-                        </TableCell>
-                        <TableCell style={{ minWidth: 80, maxWidth: 80 }} className='border-table text-table' align="center">
-                          {row.persona.nroDocumento}
-                        </TableCell>
-                        <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table text-table'>
-                          {row.persona.apellidoNombre}
-                        </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
-                          {row.persona.razonSocial}
-                        </TableCell>
-                        <TableCell style={{ minWidth: 80, maxWidth: 80 }} className='border-table text-table' align="center">
-                          {row.persona.celular}
-                        </TableCell>
-                        <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table text-table'>
-                          {row.dependencia.name}
-                        </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' align="center">
-                          <Button size='small' variant="contained" color="warning">
-                            {pad(row.fecha[2], 2)}/{pad(row.fecha[1], 2)}/{row.fecha[0]}
-                          </Button>
-                        </TableCell>
-                        <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' align="center">
-                          <Button size='small' variant="contained" color="success">
-                            {row.horaIni}
-                          </Button>
-                        </TableCell>
-                        <TableCell style={{ minWidth: 80, maxWidth: 80 }} className='border-table text-table' align="center">
-                        </TableCell>
-                      </StyledTableRow >
-                    );
-                  })}
-                {(!emptyRows) && (
-                  <TableRow style={{ height: 53 }}>
-                    <TableCell colSpan={7} >
-                      No data
-                    </TableCell>
+                      {...params}
+                    />}
+                />
+              </Grid>
+            </Grid>
+            <TableContainer sx={{ maxWidth: '100%', mx: 'auto', maxHeight: '540px' }}>
+              <Table stickyHeader aria-label="sticky table" ref={componentRef} className='padding-print'>
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell padding="checkbox" className='bg-gore border-table text-table'>
+                      <Checkbox
+                        style={{ color: 'white' }}
+                        indeterminate={selected.length > 0 && selected.length < result.data.length}
+                        checked={result && result.data.length > 0 && selected.length === result.data.length}
+                        onChange={onChangeAllRow}
+                        inputProps={{
+                          'aria-label': 'select all desserts',
+                        }}
+                      />
+                    </StyledTableCell>
+                    <StyledTableCell style={{ minWidth: 80, maxWidth: 80 }} className='bg-gore border-table text-table'>Nº Expediente
+                      {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                    </StyledTableCell>
+                    <StyledTableCell style={{ minWidth: 80, maxWidth: 80 }} className='bg-gore border-table text-table'>Nº Documento
+                      {/* <TextField {...defaultProps('abreviatura')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                    </StyledTableCell>
+                    <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table text-table'>Apellidos y Nombres
+                      {/* <TextField {...defaultProps('nombaperesponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                    </StyledTableCell>
+                    <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Razon Social
+                      {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                    </StyledTableCell>
+                    <StyledTableCell style={{ minWidth: 80, maxWidth: 80 }} className='bg-gore border-table text-table'>Nº Celular
+                      {/* <TextField {...defaultProps('dependencia')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                    </StyledTableCell>
+                    <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table text-table'>Dependencia
+                    </StyledTableCell>
+                    <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Fecha
+                      {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                    </StyledTableCell>
+                    <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Hora de Cita
+                      {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                    </StyledTableCell>
+                    <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Firma
+                      {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                    </StyledTableCell>
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[10, 20, 50]}
-            component="div"
-            count={result.size}
-            rowsPerPage={state.rowsPerPage}
-            page={state.page}
-            onPageChange={onPageChange}
-            onRowsPerPageChange={onRowsPerPageChange}
-          />
-        </CardContent>
-      </Card>
-
+                </TableHead>
+                <TableBody>
+                  {(result && result.data && result.data.length ? result.data : []).
+                    map((row, index) => {
+                      const isItemSelected = isSelected(toID(row));
+                      return (
+                        <StyledTableRow
+                          style={{ backgroundColor: (1) ? '' : (index % 2 === 0 ? '#f1f19c' : '#ffffbb') }}
+                          hover
+                          onClick={(event) => onClickRow(event, toID(row))}
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={index + ' ' + toID(row)}
+                          selected={isItemSelected}
+                        >
+                          <TableCell padding="checkbox" className='border-table text-table'>
+                            <Checkbox
+                              color="primary"
+                              checked={isItemSelected}
+                            />
+                          </TableCell>
+                          <TableCell style={{ minWidth: 80, maxWidth: 80 }} className='border-table text-table' align="center">
+                            {row.nroExpediente}
+                          </TableCell>
+                          <TableCell style={{ minWidth: 80, maxWidth: 80 }} className='border-table text-table' align="center">
+                            {row.persona.nroDocumento}
+                          </TableCell>
+                          <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table text-table'>
+                            {row.persona.apellidoNombre}
+                          </TableCell>
+                          <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table'>
+                            {row.persona.razonSocial}
+                          </TableCell>
+                          <TableCell style={{ minWidth: 80, maxWidth: 80 }} className='border-table text-table' align="center">
+                            {row.persona.celular}
+                          </TableCell>
+                          <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table text-table'>
+                            {row.dependencia.name}
+                          </TableCell>
+                          <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' align="center">
+                            <Button size='small' variant="contained" color="warning">
+                              {pad(row.fecha[2], 2)}/{pad(row.fecha[1], 2)}/{row.fecha[0]}
+                            </Button>
+                          </TableCell>
+                          <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' align="center">
+                            <Button size='small' variant="contained" color="success">
+                              {row.horaIni}
+                            </Button>
+                          </TableCell>
+                          <TableCell style={{ minWidth: 80, maxWidth: 80 }} className='border-table text-table' align="center">
+                          </TableCell>
+                        </StyledTableRow >
+                      );
+                    })}
+                  {(!emptyRows) && (
+                    <TableRow style={{ height: 53 }}>
+                      <TableCell colSpan={7} >
+                        No data
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[10, 20, 50]}
+              component="div"
+              count={result.size}
+              rowsPerPage={state.rowsPerPage}
+              page={state.page}
+              onPageChange={onPageChange}
+              onRowsPerPageChange={onRowsPerPageChange}
+            />
+          </CardContent>
+        </Card>
+      </LocalizationProvider>
     </>
   );
 
