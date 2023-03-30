@@ -89,9 +89,7 @@ const HomePage = ({ logOut, match }) => {
 
   const items = [
     {
-      perms: 'ADMIN_ATENCIONCIUDANANA', text: 'Gestión de Dependencias', icon: <QuizIcon />, path: '/dependencia', items: [
-        { text: 'Agregar', icon: <AddIcon />, path: '/dependencia/create' }
-      ]
+      perms: 'ADMIN_ATENCIONCIUDANANA', text: 'Gestión de Dependencias', icon: <QuizIcon />, path: '/dependencia', items: []
     },
     {
       perms: 'ADMIN_ATENCIONCIUDANANA', text: 'Gestión de Cronograma', icon: <QuizIcon />, path: '/cronograma', items: [
