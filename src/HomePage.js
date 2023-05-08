@@ -103,6 +103,9 @@ const HomePage = ({ logOut, match }) => {
       perms: 'REGISTER_ATENCIONCIUDANANA', text: 'Atenciones Finalizadas', icon: <QuizIcon />, path: '/atencion/finalizada'
     },
     {
+      perms: 'REGISTER_ATENCIONCIUDANANA', text: 'Atenciones Canceladas', icon: <QuizIcon />, path: '/atencion/cancelada'
+    },
+    {
       text: 'Salir', icon: <LogoutIcon />, onClick: () => {
         logOut();
       }
@@ -223,6 +226,8 @@ const HomePage = ({ logOut, match }) => {
 
   const AtencionListEnd = lazyLoader(() => import('./screens/atencion/ListEnd'));
 
+  const AtencionListCancel = lazyLoader(() => import('./screens/atencion/ListCancel'));
+
   const UserList = lazyLoader(() => import('./screens/user/List'));
 
   const UserForm = lazyLoader(() => import('./screens/user/Form')
@@ -306,6 +311,7 @@ const HomePage = ({ logOut, match }) => {
           {/* Atencion */}
           <Route path={`/atencion`} element={<AtencionList setO={setO} />} />
           <Route path={`/atencion/finalizada`} element={<AtencionListEnd setO={setO} />} />
+          <Route path={`/atencion/cancelada`} element={<AtencionListCancel setO={setO} />} />
 
 
           <Route path={`/user`} element={<UserList setO={setO} />} />

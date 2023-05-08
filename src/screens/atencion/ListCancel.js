@@ -106,15 +106,15 @@ const List = () => {
 
   const printOnClick = useReactToPrint({
     content: () => componentRef.current,
-    documentTitle: 'Listado de Atenciones Finalizadas.',
-    onAfterPrint: () => dispatch({ type: "snack", msg: 'Listado de Atenciones Finalizada impreso.!' }),
+    documentTitle: 'Ficha de Atenciones Canceladas.',
+    onAfterPrint: () => dispatch({ type: "snack", msg: 'Ficha de Atenciónes Canceladas impreso.!' }),
   });
 
   const fetchData = async (page) => {
     var data = { data: [] };
     if (networkStatus.connected) {
       const result = await http.get(process.env.REACT_APP_PATH + '/atencion/' + page + '/' + state.rowsPerPage + '?'
-        + new URLSearchParams(o.dependencia ? o : {}).toString() + '&activo=0');
+        + new URLSearchParams(o.dependencia ? o : {}).toString() + '&activo=2');
       if (result) {
         data.size = result.size;
         data.data = data.data.concat(result.content);
@@ -152,7 +152,7 @@ const List = () => {
   }, [height, width]);
 
   useEffect(() => {
-    dispatch({ type: 'title', title: 'Listado de Tickets Atendidos de Atención al Ciudadano - GORE Áncash' });
+    dispatch({ type: 'title', title: 'Listado de Tickets de Atención Cancelados de Atención al Ciudadano - GORE Áncash' });
     fetchData(state.page)
   }, [state.page, state.rowsPerPage]);
 
@@ -285,10 +285,13 @@ const List = () => {
                     </StyledTableCell>
                     <StyledTableCell style={{ minWidth: 150, maxWidth: 150 }} className='bg-gore border-table text-table'>Dependencia
                     </StyledTableCell>
-                    <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Fecha de Cita
+                    <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Fecha
                       {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                     </StyledTableCell>
-                    <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Hora Atendida
+                    <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Hora Cancelada
+                      {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
+                    </StyledTableCell>
+                    <StyledTableCell style={{ minWidth: 100, maxWidth: 100 }} className='bg-gore border-table text-table'>Motivo de Cancelación
                       {/* <TextField {...defaultProps('cargoresponsable')} style={{ padding: 0, marginTop: '5px !important' }} /> */}
                     </StyledTableCell>
                   </TableRow>
@@ -336,11 +339,14 @@ const List = () => {
                             <Button size='small' variant="contained" color="warning">
                               {pad(row.fecha[2], 2)}/{pad(row.fecha[1], 2)}/{row.fecha[0]}
                             </Button>
-                          </TableCell>
+                          </TableCell>                          
                           <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' align="center">
                             <Button size='small' variant="contained" color="error">
-                              {row.horaFin}
+                              {row.horaCancelar}
                             </Button>
+                          </TableCell>
+                          <TableCell style={{ minWidth: 150, maxWidth: 150 }} className='border-table text-table'>
+                            {row.motivoCancelar}
                           </TableCell>
                         </StyledTableRow >
                       );

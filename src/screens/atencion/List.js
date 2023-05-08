@@ -5,7 +5,7 @@ import {
   TableHead, TableBody, TableRow, TableContainer, Toolbar, Grid, MenuItem, CardContent, Card
 } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
-import { Autorenew, Keyboard, PictureAsPdf } from '@mui/icons-material';
+import { Autorenew, EventBusy, Keyboard, PictureAsPdf } from '@mui/icons-material';
 import { http, useResize, useFormState } from 'gra-react-utils';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +16,10 @@ import { useReactToPrint } from 'react-to-print';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -60,6 +64,24 @@ const List = () => {
 
   const componentRef = useRef();
 
+  const emptyRows = result.data && result.data.length;
+
+  const [mensaje, setMensaje] = useState('');
+
+  const [dialogAbierto, setDialogAbierto] = useState(false);
+
+  const handleMensajeChange = (event) => {
+    setMensaje(event.target.value);
+  };
+
+  const handleDialogOpen = () => {
+    setDialogAbierto(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogAbierto(false);
+  };
+
   const onChangeAllRow = (event) => {
     if (event.target.checked) {
       const newSelected = result.data.map((row) => toID(row));
@@ -87,8 +109,6 @@ const List = () => {
     }
     setSelected(newSelected);
   };
-
-  const emptyRows = result.data && result.data.length;
 
   const onPageChange = (
     event, page
@@ -178,6 +198,26 @@ const List = () => {
     });
   };
 
+  const cancelarOnClick = () => {
+    var hoy = new Date();
+    var hora = pad(hoy.getHours(), 2) + ':' + pad(hoy.getMinutes(), 2) + ':' + pad(hoy.getSeconds(), 2);
+    if (mensaje) {
+      dispatch({
+        type: "confirm", msg: 'Desea cancelar en ticket de atención al registro seleccionado?', cb: (e) => {
+          if (e) {
+            http.put(process.env.REACT_APP_PATH + '/atencion/' + selected[0], { activo: 2, horaCancelar: hora, motivoCancelar: mensaje }).then(e => {
+              navigate('/atencion');
+              dispatch({ type: "snack", msg: 'Ticket de atención cancelado satisfactoriamente!' });
+            });
+          }
+        }
+      });
+    } else {
+      dispatch({ type: "snack", msg: 'Ingrese el motivo de la Cancelación del Ticket al Ciudadano.!' });
+    }
+
+  };
+
   function onChangeFecha(v) {
     set(o => ({ ...o, fecha: v }));
     o.fecha = v;
@@ -197,6 +237,7 @@ const List = () => {
   const toID = (row) => {
     return row._id && row._id.$oid ? row._id.$oid : row.id;
   }
+
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -204,16 +245,17 @@ const List = () => {
           <CardContent>
             <Toolbar className="Toolbar-table" direction="row" >
               <Grid container spacing={2}>
-                <Grid item xs={12} md={2}>
+                <Grid item xs={12} md={3}>
+                  <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={atenderOnClick} variant="contained" color="primary">Atender</Button>
                 </Grid>
                 <Grid item xs={12} md={3}>
-                  <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EditIcon />} onClick={atenderOnClick} variant="contained" color="success">Atender</Button>
+                  <Button sx={{ width: '100%', fontWeight: 'bold' }} disabled={!selected.length} startIcon={<EventBusy />} onClick={handleDialogOpen} variant="contained" color="primary">Cancelar</Button>
                 </Grid>
                 <Grid item xs={12} md={3}>
-                  <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} endIcon={<Autorenew />} variant="contained" color="success">Actualizar</Button>
+                  <Button sx={{ width: '100%', fontWeight: 'bold' }} onClick={onClickRefresh} endIcon={<Autorenew />} variant="contained" color="primary">Actualizar</Button>
                 </Grid>
                 <Grid item xs={12} md={3}>
-                  <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<PictureAsPdf />} onClick={printOnClick} variant="contained" color="error">Imprimir</Button>
+                  <Button sx={{ width: '100%', fontWeight: 'bold' }} startIcon={<PictureAsPdf />} onClick={printOnClick} variant="contained" color="primary">Imprimir</Button>
                 </Grid>
               </Grid>
             </Toolbar>
@@ -390,6 +432,28 @@ const List = () => {
             />
           </CardContent>
         </Card>
+
+        <Dialog open={dialogAbierto} onClose={handleDialogClose}>
+          <DialogTitle>Ingrese el motivo de la Cancelación del Ticket al Ciudadano:</DialogTitle>
+          <DialogContent>
+            <TextField
+              required
+              autoFocus
+              size="medium"
+              margin="dense"
+              name="mensaje"
+              label="Mensaje"
+              fullWidth
+              value={mensaje}
+              onChange={handleMensajeChange}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDialogClose}>Cancelar</Button>
+            <Button onClick={cancelarOnClick}>Enviar</Button>
+          </DialogActions>
+        </Dialog>
+
       </LocalizationProvider>
     </>
   );
