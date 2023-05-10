@@ -89,24 +89,24 @@ const HomePage = ({ logOut, match }) => {
 
   const items = [
     {
-      perms: 'ADMIN_ATENCION_CIUDANANA', text: 'Gestión de Dependencias', icon: <QuizIcon />, path: '/dependencia', items: []
+      perms: 'ADMIN_ATENCION_CIUDADANA', text: 'Gestión de Dependencias', icon: <QuizIcon />, path: '/dependencia', items: []
     },
     {
-      perms: 'ADMIN_ATENCION_CIUDANANA', text: 'Gestión de Cronograma', icon: <QuizIcon />, path: '/cronograma', items: [
+      perms: 'ADMIN_ATENCION_CIUDADANA', text: 'Gestión de Cronograma', icon: <QuizIcon />, path: '/cronograma', items: [
         { text: 'Agregar', icon: <AddIcon />, path: '/cronograma/create' }
       ]
     },
     {
-      perms: 'REGISTER_ATENCION_CIUDANANA', text: 'Atenciones Pendientes', icon: <QuizIcon />, path: '/atencion'
+      perms: 'REGISTER_ATENCION_CIUDADANA', text: 'Atenciones Pendientes', icon: <QuizIcon />, path: '/atencion'
     },
     {
-      perms: 'REGISTER_ATENCION_CIUDANANA', text: 'Atenciones Finalizadas', icon: <QuizIcon />, path: '/atencion/finalizada'
+      perms: 'REGISTER_ATENCION_CIUDADANA', text: 'Atenciones Finalizadas', icon: <QuizIcon />, path: '/atencion/finalizada'
     },
     {
-      perms: 'REGISTER_ATENCION_CIUDANANA', text: 'Atenciones Canceladas', icon: <QuizIcon />, path: '/atencion/cancelada'
+      perms: 'REGISTER_ATENCION_CIUDADANA', text: 'Atenciones Canceladas', icon: <QuizIcon />, path: '/atencion/cancelada'
     },
     {
-      perms: 'ADMIN_ATENCION_CIUDANANA', text: 'Reportes', icon: <QuizIcon />, path: '/reporte/fechas', items: [
+      perms: 'ADMIN_ATENCION_CIUDADANA', text: 'Reportes', icon: <QuizIcon />, path: '/reporte/fechas', items: [
         { text: 'Reporte por Rango de Fechas', icon: <AddIcon />, path: '/reporte/fechas' },
         { text: 'Reporte por Dependencia', icon: <AddIcon />, path: '/reporte/dependencia' }
       ]
