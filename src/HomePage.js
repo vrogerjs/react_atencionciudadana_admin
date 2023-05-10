@@ -89,21 +89,27 @@ const HomePage = ({ logOut, match }) => {
 
   const items = [
     {
-      perms: 'ADMIN_ATENCIONCIUDANANA', text: 'Gestión de Dependencias', icon: <QuizIcon />, path: '/dependencia', items: []
+      perms: 'ADMIN_ATENCION_CIUDANANA', text: 'Gestión de Dependencias', icon: <QuizIcon />, path: '/dependencia', items: []
     },
     {
-      perms: 'ADMIN_ATENCIONCIUDANANA', text: 'Gestión de Cronograma', icon: <QuizIcon />, path: '/cronograma', items: [
+      perms: 'ADMIN_ATENCION_CIUDANANA', text: 'Gestión de Cronograma', icon: <QuizIcon />, path: '/cronograma', items: [
         { text: 'Agregar', icon: <AddIcon />, path: '/cronograma/create' }
       ]
     },
     {
-      perms: 'REGISTER_ATENCIONCIUDANANA', text: 'Atenciones Pendientes', icon: <QuizIcon />, path: '/atencion'
+      perms: 'REGISTER_ATENCION_CIUDANANA', text: 'Atenciones Pendientes', icon: <QuizIcon />, path: '/atencion'
     },
     {
-      perms: 'REGISTER_ATENCIONCIUDANANA', text: 'Atenciones Finalizadas', icon: <QuizIcon />, path: '/atencion/finalizada'
+      perms: 'REGISTER_ATENCION_CIUDANANA', text: 'Atenciones Finalizadas', icon: <QuizIcon />, path: '/atencion/finalizada'
     },
     {
-      perms: 'REGISTER_ATENCIONCIUDANANA', text: 'Atenciones Canceladas', icon: <QuizIcon />, path: '/atencion/cancelada'
+      perms: 'REGISTER_ATENCION_CIUDANANA', text: 'Atenciones Canceladas', icon: <QuizIcon />, path: '/atencion/cancelada'
+    },
+    {
+      perms: 'ADMIN_ATENCION_CIUDANANA', text: 'Reportes', icon: <QuizIcon />, path: '/reporte/fechas', items: [
+        { text: 'Reporte por Rango de Fechas', icon: <AddIcon />, path: '/reporte/fechas' },
+        { text: 'Reporte por Dependencia', icon: <AddIcon />, path: '/reporte/dependencia' }
+      ]
     },
     {
       text: 'Salir', icon: <LogoutIcon />, onClick: () => {
@@ -228,6 +234,11 @@ const HomePage = ({ logOut, match }) => {
 
   const AtencionListCancel = lazyLoader(() => import('./screens/atencion/ListCancel'));
 
+    // Reportes
+    const ReporteListFechas = lazyLoader(() => import('./screens/reporte/ListFechas'));
+  
+    const ReporteListDependencia = lazyLoader(() => import('./screens/reporte/ListDependencia'));
+
   const UserList = lazyLoader(() => import('./screens/user/List'));
 
   const UserForm = lazyLoader(() => import('./screens/user/Form')
@@ -313,6 +324,9 @@ const HomePage = ({ logOut, match }) => {
           <Route path={`/atencion/finalizada`} element={<AtencionListEnd setO={setO} />} />
           <Route path={`/atencion/cancelada`} element={<AtencionListCancel setO={setO} />} />
 
+          {/* Reportes */}
+          <Route path={`/reporte/fechas`} element={<ReporteListFechas setO={setO} />} />
+          <Route path={`/reporte/dependencia`} element={<ReporteListDependencia setO={setO} />} />
 
           <Route path={`/user`} element={<UserList setO={setO} />} />
           <Route path={`/user/create`} element={<UserForm />} />
