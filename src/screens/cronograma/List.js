@@ -104,6 +104,7 @@ const List = () => {
     if (networkStatus.connected) {
       const result = await http.get(process.env.REACT_APP_PATH + '/cronograma/' + page + '/' + state.rowsPerPage);
       data.size = result.size;
+      data.totalElements = result.totalElements;
       data.data = data.data.concat(result.content);
     }
     setResult(data);
@@ -272,7 +273,7 @@ const List = () => {
           <TablePagination
             rowsPerPageOptions={[10, 20, 50]}
             component="div"
-            count={result.size}
+            count={result.totalElements}
             rowsPerPage={state.rowsPerPage}
             page={state.page}
             onPageChange={onPageChange}

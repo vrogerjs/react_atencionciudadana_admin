@@ -136,6 +136,7 @@ const List = () => {
         + '?' + new URLSearchParams({ activo: 1, ...o }).toString()
       )).catch(error => console.log('error', error));
       data.size = result.size;
+      data.totalElements = result.totalElements;
       data.data = data.data.concat(result.content);
     }
     setResult(data);
@@ -424,7 +425,7 @@ const List = () => {
             <TablePagination
               rowsPerPageOptions={[10, 20, 50]}
               component="div"
-              count={result.size}
+              count={result.totalElements}
               rowsPerPage={state.rowsPerPage}
               page={state.page}
               onPageChange={onPageChange}

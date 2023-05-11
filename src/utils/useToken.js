@@ -44,7 +44,9 @@ export const Login = function ({ setToken }) {
   }
 
   const logOut = function (e) {
-    setProfile(null);
+    localStorage.removeItem('perms');
+    localStorage.removeItem('user_nicename');
+    setToken({ token: null });
   }
 
   const loginOnClick = function (e) {

@@ -117,6 +117,7 @@ const List = () => {
         + new URLSearchParams(o.dependencia ? o : {}).toString() + '&activo=2');
       if (result) {
         data.size = result.size;
+        data.totalElements = result.totalElements;
         data.data = data.data.concat(result.content);
       }
       setResult(data);
@@ -339,7 +340,7 @@ const List = () => {
                             <Button size='small' variant="contained" color="warning">
                               {pad(row.fecha[2], 2)}/{pad(row.fecha[1], 2)}/{row.fecha[0]}
                             </Button>
-                          </TableCell>                          
+                          </TableCell>
                           <TableCell style={{ minWidth: 100, maxWidth: 100 }} className='border-table text-table' align="center">
                             <Button size='small' variant="contained" color="error">
                               {row.horaCancelar}
@@ -364,7 +365,7 @@ const List = () => {
             <TablePagination
               rowsPerPageOptions={[10, 20, 50]}
               component="div"
-              count={result.size}
+              count={result.totalElements}
               rowsPerPage={state.rowsPerPage}
               page={state.page}
               onPageChange={onPageChange}
